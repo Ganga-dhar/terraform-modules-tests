@@ -1,0 +1,93 @@
+name: Terraform CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+
+  terraform-check:
+    name: Terraform Format and Validate
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init
+        working-directory: environments/dev
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        working-directory: environments/dev
+        run: terraform validate
+
+
+  terraform-test:
+    name: Terraform Tests
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Test EC2 Module
+        working-directory: modules/ec2
+        run: |
+          terraform init
+          terraform test
+
+      - name: Test S3 Module
+        working-directory: modules/s3
+        run: |
+          terraform init
+          terraform test
+
+
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        working-directory: environments/dev
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: environments/dev
+        run: terraform plan -out=tfplan
