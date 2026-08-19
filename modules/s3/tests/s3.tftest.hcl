@@ -1,3 +1,5 @@
+mock_provider "aws" {}
+
 variables {
   bucket_name = "terraform-test-bucket-12345"
   environment = "test"
