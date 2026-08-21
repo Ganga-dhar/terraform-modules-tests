@@ -93,6 +93,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: environments/dev
-        run: terraform plan \
-                -var-file="terraform.tfvars" \
-                -out=tfplan
+        run: |
+          terraform plan \
+            -var-file="terraform.tfvars" \
+            -out="tfplan"
