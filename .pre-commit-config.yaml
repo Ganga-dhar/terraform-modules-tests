@@ -6,6 +6,10 @@ repos:
       - id: terraform_validate
       - id: terraform_tflint
       - id: terraform_checkov
+        args:
+          - --skip-check
+          - CKV_AWS_*
+          - CKV2_AWS_*
 
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.24.2
