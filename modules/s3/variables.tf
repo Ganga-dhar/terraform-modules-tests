@@ -18,7 +18,3 @@ variable "expiration_days" {
   default = 365
 }
 
-variable "enable_replication" {
-  type    = bool
-  default = false
-}

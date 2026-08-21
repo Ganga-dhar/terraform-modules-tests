@@ -68,24 +68,3 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
     }
   }
 }
-
-
-##CKV_AWS_144
-##Ensure that S3 bucket has cross-region replication enabled
-
-resource "aws_s3_bucket_replication_configuration" "this" {
-  count = var.enable_replication ? 1 : 0
-
-  bucket = aws_s3_bucket.this.id
-
-  role = aws_iam_role.replication.arn
-
-  rule {
-    id     = "replication"
-    status = "Enabled"
-
-    destination {
-      bucket = var.replication_bucket_arn
-    }
-  }
-}
