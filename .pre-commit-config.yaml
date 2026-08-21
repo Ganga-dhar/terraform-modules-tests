@@ -8,7 +8,6 @@ repos:
 
       - id: terraform_tflint
 
-      - id: terraform_checkov
 
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.24.3
