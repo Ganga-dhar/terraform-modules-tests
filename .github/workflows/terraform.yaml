@@ -91,6 +91,10 @@ jobs:
         working-directory: environments/dev
         run: terraform init
 
+      - name: Terraform Validate
+        working-directory: environments/dev
+        run: terraform validate
+        
       - name: Terraform Plan
         working-directory: environments/dev
         run: |
