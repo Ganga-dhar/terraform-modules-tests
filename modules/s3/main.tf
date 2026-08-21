@@ -64,25 +64,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
     filter {}
 
     expiration {
-      days = 365
-    }
-  }
-}
-
-
-##CKV2_AWS_61
-##Ensure that an S3 bucket has a lifecycle configuration
-
-resource "aws_s3_bucket_lifecycle_configuration" "this" {
-  bucket = aws_s3_bucket.this.id
-
-  rule {
-    id     = "default-lifecycle"
-    status = "Enabled"
-
-    filter {}
-
-    expiration {
       days = var.expiration_days
     }
   }

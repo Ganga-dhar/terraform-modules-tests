@@ -1,14 +1,3 @@
-resource "aws_instance" "this" {
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  ebs_optimized = true
-  monitoring    = true
-
-  tags = {
-    Name        = var.name
-    Environment = var.environment
-  }
-}
 
 resource "aws_iam_role" "ec2" {
   name = "${var.name}-role"
