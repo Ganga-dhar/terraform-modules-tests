@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = "ap-south-1"
 
   # Prevent Terraform from attempting to use AWS credentials
   # during plan-based testing.
