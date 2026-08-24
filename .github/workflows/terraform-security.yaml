@@ -1,0 +1,31 @@
+name: Terraform CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  terraform-security:
+    name: Terraform Security
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Terraform Security Checks
+        uses: ./.github/actions/terraform-security
+        with:
+          terraform-version: "1.15.1"
