@@ -1,0 +1,22 @@
+
+name: Terraform CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  security:
+    uses: ./.github/workflows/terraform-security-reusable.yml
+
+    with:
+      terraform-version: "1.15.1"
+
+    permissions:
+      contents: read
