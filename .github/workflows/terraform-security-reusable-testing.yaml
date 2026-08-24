@@ -1,5 +1,5 @@
 
-name: Terraform CI
+name: Terraform CI-Workflow-Testing
 
 on:
   push:
