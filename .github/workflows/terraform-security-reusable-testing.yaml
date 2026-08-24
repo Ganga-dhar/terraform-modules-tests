@@ -13,7 +13,7 @@ on:
 jobs:
 
   security:
-    uses: ./.github/workflows/terraform-security-reusable.yml
+    uses: ./.github/workflows/terraform-security-reusable.yaml
 
     with:
       terraform-version: "1.15.1"
