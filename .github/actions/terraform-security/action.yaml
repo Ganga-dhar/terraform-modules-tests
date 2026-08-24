@@ -1,0 +1,47 @@
+name: Terraform Security Checks
+description: Run Terraform formatting, validation, TFLint, Checkov and Gitleaks
+
+inputs:
+  terraform-version:
+    description: Terraform version
+    required: false
+    default: "1.15.1"
+
+runs:
+  using: composite
+
+  steps:
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ inputs.terraform-version }}
+
+    - name: Setup TFLint
+      uses: terraform-linters/setup-tflint@v6
+
+    - name: Install Python dependencies
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install pre-commit checkov
+
+    - name: Initialize TFLint
+      shell: bash
+      run: |
+        tflint --init
+
+    - name: Run Pre-commit
+      shell: bash
+      run: |
+        pre-commit run --all-files
+
+    - name: Run Checkov
+      shell: bash
+      run: |
+        checkov -d . --framework terraform
+
+    - name: Run Gitleaks
+      uses: gitleaks/gitleaks-action@v2
+      env:
+        GITHUB_TOKEN: ${{ github.token }}

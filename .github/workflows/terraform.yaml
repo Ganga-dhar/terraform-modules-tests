@@ -16,6 +16,7 @@ jobs:
   terraform-check:
     name: Terraform Format and Validate
     runs-on: ubuntu-latest
+    environment: DEV
 
     steps:
 
@@ -40,6 +41,7 @@ jobs:
   terraform-test:
     name: Terraform Tests
     runs-on: ubuntu-latest
+    environment: DEV
 
     steps:
 
@@ -65,6 +67,7 @@ jobs:
   terraform-plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
+    environment: DEV
 
     permissions:
       id-token: write
@@ -81,13 +84,20 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: us-east-1
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Terraform Init
         working-directory: environments/dev
         run: terraform init
 
+      - name: Terraform Validate
+        working-directory: environments/dev
+        run: terraform validate
+        
       - name: Terraform Plan
         working-directory: environments/dev
-        run: terraform plan -out=tfplan
+        run: |
+          terraform plan \
+            -var-file="terraform.tfvars" \
+            -out="tfplan"
